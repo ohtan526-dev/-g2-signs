@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>免許イージーマニュアル</title>
+<style>
+:root{--bg:#f4f5f2;--card:#fff;--ink:#16181a;--sub:#5d6166;--line:#e1e3de;--acc:#1f6f4a;--acc-bg:#e3f2ea;--bad:#b3261e;--bad-bg:#fbe9e7;--warn-bg:#fff4d6;--warn:#7a5200;--g2:#46ff8c}
+@media (prefers-color-scheme:dark){:root{--bg:#121413;--card:#1c1f1d;--ink:#eef0ec;--sub:#a4a9a4;--line:#2d312e;--acc:#62d39a;--acc-bg:#1d3328;--bad:#ff8a80;--bad-bg:#3a201e;--warn-bg:#3a3014;--warn:#f3cf73}}
+*{box-sizing:border-box}
+html{scroll-padding-top:120px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;-webkit-tap-highlight-color:transparent;line-height:1.6}
+.top{position:sticky;top:0;z-index:5;background:var(--bg);padding:12px 16px 0;border-bottom:1px solid var(--line)}
+.top-in{max-width:560px;margin:0 auto}
+header{display:flex;align-items:center;justify-content:space-between;gap:8px}
+h1{font-size:18px;margin:0;font-weight:700;line-height:1.3}
+h1 small{display:block;font-size:12px;font-weight:400;color:var(--sub)}
+.chip{font-size:12px;padding:5px 10px;border-radius:999px;background:var(--line);color:var(--sub);white-space:nowrap}
+.chip.on{background:var(--acc-bg);color:var(--acc)}
+nav{display:grid;grid-template-columns:repeat(4,1fr);margin-top:10px}
+nav button{border:0;background:none;min-height:46px;border-radius:0;font-size:14px;color:var(--sub);border-bottom:3px solid transparent;font-weight:600}
+nav button.sel{color:var(--ink);border-color:var(--acc)}
+main{max-width:560px;margin:0 auto;padding:16px 16px 48px}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin:0 0 6px}
+.bar i{display:block;height:100%;background:var(--acc);width:0;transition:width .25s}
+.meta{display:flex;justify-content:space-between;font-size:13px;color:var(--sub);margin-bottom:10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px 16px 18px}
+.center{text-align:center}
+.sign{width:170px;height:170px;margin:0 auto 10px;display:block}
+.sign.sm{width:130px;height:130px}
+.q{font-size:15px;color:var(--sub);margin:4px 0 0}
+.qbig{font-size:18px;font-weight:700;margin:0 0 4px;line-height:1.5}
+.ans{margin-top:10px;padding-top:14px;border-top:1px dashed var(--line)}
+.en{font-size:24px;font-weight:700;margin:0}
+.jp{font-size:17px;margin:4px 0 0}
+.tags{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:10px}
+.tag{font-size:12px;padding:4px 9px;border-radius:999px;background:var(--bg);color:var(--sub)}
+.tip{font-size:14px;color:var(--sub);margin:10px 0 0}
+.row{display:grid;gap:10px;margin-top:12px}
+.r3{grid-template-columns:1fr 1.4fr 1fr}.r2{grid-template-columns:1fr 1fr}
+button{font:inherit;font-size:16px;min-height:52px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+button:active{transform:scale(.98)}
+.primary{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:700}
+@media (prefers-color-scheme:dark){.primary{color:#0d1f16}}
+.ok{background:var(--acc-bg);border-color:transparent;color:var(--acc);font-weight:700}
+.ng{background:var(--bad-bg);border-color:transparent;color:var(--bad);font-weight:700}
+.opt{display:block;width:100%;text-align:left;padding:12px 14px;margin-top:8px;font-size:15px;min-height:52px;line-height:1.45}
+.opt.right{background:var(--acc-bg);border-color:var(--acc);color:var(--acc);font-weight:700}
+.opt.wrong{background:var(--bad-bg);border-color:var(--bad);color:var(--bad)}
+.opt b{display:inline-block;width:22px}
+.ex{font-size:14px;color:var(--sub);margin:12px 0 0;padding:10px 12px;background:var(--bg);border-radius:10px}
+.hide{display:none!important}
+.sec{margin-top:22px}
+.sec h2{font-size:14px;color:var(--sub);font-weight:600;margin:0 0 8px}
+.opts{display:flex;gap:8px;flex-wrap:wrap}
+.opts button{min-height:40px;font-size:14px;padding:0 14px;border-radius:999px}
+.opts button.sel{background:var(--ink);color:var(--card);border-color:var(--ink)}
+#pv{width:100%;aspect-ratio:2/1;background:#000;border-radius:12px;display:block}
+.help{font-size:13px;color:var(--sub);margin:8px 0 0}
+#qrbox{display:flex;justify-content:center;padding:12px;background:#fff;border-radius:12px;margin-top:8px}
+.g h2{font-size:17px;margin:0 0 8px;display:flex;gap:10px;align-items:center}
+.g h2 .n{flex:none;width:28px;height:28px;border-radius:50%;background:var(--acc);color:#fff;font-size:14px;display:flex;align-items:center;justify-content:center}
+@media (prefers-color-scheme:dark){.g h2 .n{color:#0d1f16}}
+.g .card{margin-bottom:12px;padding:16px}
+.g p,.g li{font-size:15px;margin:6px 0}
+.g ul{padding-left:20px;margin:6px 0}
+.note{background:var(--warn-bg);color:var(--warn);border-radius:12px;padding:10px 12px;font-size:14px;margin-top:8px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+td{padding:8px 4px;border-bottom:1px solid var(--line);vertical-align:top}
+td:last-child{text-align:right;font-weight:700;white-space:nowrap;padding-left:10px}
+.flow{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.flow div{background:var(--bg);border-radius:10px;padding:8px 12px;font-size:14px}
+.flow div b{color:var(--acc)}
+.big{font-size:34px;font-weight:800;margin:6px 0}
+.pass{color:var(--acc)}.fail{color:var(--bad)}
+.src{font-size:12px;color:var(--sub)}
+.src a{color:var(--sub)}
+</style>
+</head>
+<body>
+<div class="top"><div class="top-in">
+<header>
+  <h1>免許イージーマニュアル<small>Virginia Driver's License</small></h1>
+  <span class="chip" id="conn">プレビュー</span>
+</header>
+<nav>
+  <button data-t="guide" class="sel">ガイド</button>
+  <button data-t="signs">標識</button>
+  <button data-t="rules">ルール</button>
+  <button data-t="test">模擬テスト</button>
+</nav>
+</div></div>
+
+<main>
+<!-- GUIDE -->
+<section id="v-guide" class="g">
+  <div class="card">
+    <h2><span class="n">1</span>全体の流れ</h2>
+    <div class="flow">
+      <div><b>① 書類をそろえる</b>　身分証明・住所証明など</div>
+      <div><b>② DMVで筆記＋視力検査</b>　合格すると仮免許（Learner's Permit）</div>
+      <div><b>③ 60日以上 路上練習</b>　免許保持者が助手席に同乗</div>
+      <div><b>④ 実技試験（Road Skills Test）</b>　合格で免許</div>
+    </div>
+    <p class="help">18歳以上でDMV認定の自動車学校（Driver Education）を修了した場合は、DMVでの実技試験が不要になり、筆記だけでOK。</p>
+    <div class="note">2027年1月1日から、18〜20歳で初めて免許を取る人には新しい講習の義務がつきます。20歳以下なら早めに。</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">2</span>DMVに持っていくもの</h2>
+    <ul>
+      <li>身分証明 1点（Proof of identity）</li>
+      <li>合法滞在の証明 1点（Proof of legal presence）※米国パスポートなら①②兼用できることが多い</li>
+      <li>バージニア州の住所証明 2点（公共料金の請求書、銀行の明細など）</li>
+      <li>SSN（ソーシャルセキュリティ番号）の証明</li>
+      <li>手数料（カード可）</li>
+    </ul>
+    <div class="note">使える書類は変わることがあります。行く前にDMVサイトの「Online Document Guide」で必ず確認。予約して行くと待ち時間が短い。</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">3</span>筆記試験（Knowledge Exam）</h2>
+    <table>
+      <tr><td>Part 1　標識</td><td>10問 全問正解</td></tr>
+      <tr><td>Part 2　一般知識</td><td>30問 8割（24問）以上</td></tr>
+      <tr><td>受験回数</td><td>1営業日に1回</td></tr>
+      <tr><td>3回不合格すると</td><td>8時間の講習が必要</td></tr>
+    </table>
+    <p class="help">このアプリの「模擬テスト」は本番と同じ形式（標識10問＋一般30問）です。3回連続で合格できたら受けどき。</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">4</span>仮免許で練習するときのルール</h2>
+    <ul>
+      <li>助手席に<b>21歳以上</b>の免許保持者が必要（保護者・兄弟姉妹なら18歳以上）</li>
+      <li>18歳以上は仮免を<b>60日以上</b>持ってから実技試験</li>
+      <li>実技に落ちたら<b>2日</b>待って再受験。3回落ちると自動車学校の実車講習が必要</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">5</span>日本と違う！要注意ルール</h2>
+    <ul>
+      <li><b>右側通行</b>。左折は対向車に譲る</li>
+      <li><b>赤信号でも右折OK</b>（完全停止後、「NO TURN ON RED」や赤矢印がなければ）</li>
+      <li><b>4-Way Stop</b>：先に止まった車から。同時なら右の車が先</li>
+      <li><b>スクールバス</b>が赤ランプ点滅で止まったら、対向車線も含め全員停止（中央分離帯のある道路の反対側だけ例外）</li>
+      <li><b>緊急車両</b>が来たら右端に寄って停止。後ろを走るなら500フィート以上あける</li>
+      <li><b>Move Over</b>：路肩に止まった緊急車両・レッカー車の隣の車線からは、できれば車線を移る</li>
+      <li><b>自転車</b>を追い越すときは3フィート以上あける</li>
+      <li><b>スマホを手に持って運転は禁止</b>（ナビは持たず・操作しなければOK）</li>
+      <li>高速の<b>左車線は追い越し専用</b></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">6</span>試験に出る数字まとめ</h2>
+    <table>
+      <tr><td>住宅地・学校・商業地区の制限速度</td><td>25 mph</td></tr>
+      <tr><td>未舗装路</td><td>35 mph</td></tr>
+      <tr><td>その他の道路（標識なし）</td><td>55 mph</td></tr>
+      <tr><td>Reckless driving（無謀運転）</td><td>+20 mph か 85超</td></tr>
+      <tr><td>車間距離 35mph未満 / 35–45 / 46–70</td><td>2 / 3 / 4 秒</td></tr>
+      <tr><td>ウインカーを出す</td><td>100 ft 手前</td></tr>
+      <tr><td>対向車がいたらロービーム</td><td>500 ft</td></tr>
+      <tr><td>前の車に近づいたらロービーム</td><td>200 ft</td></tr>
+      <tr><td>悪天候で視界がこれ以下ならライト</td><td>500 ft</td></tr>
+      <tr><td>消火栓から駐車禁止</td><td>15 ft</td></tr>
+      <tr><td>交差点から駐車禁止</td><td>20 ft</td></tr>
+      <tr><td>踏切から駐車禁止</td><td>50 ft</td></tr>
+      <tr><td>縦列駐車は縁石から</td><td>1 ft 以内</td></tr>
+      <tr><td>緊急車両の後ろ</td><td>500 ft 以上</td></tr>
+      <tr><td>自転車の追い越し</td><td>3 ft 以上</td></tr>
+      <tr><td>飲酒 21歳以上 / 21歳未満</td><td>.08 / .02</td></tr>
+      <tr><td>工事区間でのスピード違反罰金</td><td>最大 $500</td></tr>
+      <tr><td>工事区間でスマホを持つ罰金</td><td>$250</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">7</span>試験当日</h2>
+    <ul>
+      <li>書類一式と手数料</li>
+      <li>メガネ・コンタクトが必要な人は忘れずに（視力検査あり）</li>
+    </ul>
+    <div class="note"><b>G2は必ず外していく。</b>表示機能のあるメガネを試験中に使うと不正扱いになるおそれがあります。</div>
+  </div>
+
+  <p class="src">出典：<a href="https://www.dmv.virginia.gov/licenses-ids/exams/manual">Virginia Driver's Manual</a>・<a href="https://www.dmv.virginia.gov/licenses-ids/license/applying">Virginia DMV</a>。法律や手数料は変わることがあるので、最終確認は公式サイトで。</p>
+</section>
+
+<!-- SIGNS -->
+<section id="v-signs" class="hide">
+  <div class="bar"><i id="s-prog"></i></div>
+  <div class="meta"><span id="s-count"></span><span id="s-score"></span></div>
+  <div class="card center">
+    <svg class="sign" id="s-sign" viewBox="0 0 100 100" role="img"></svg>
+    <p class="q" id="s-q">この標識の意味は？ / What does this sign mean?</p>
+    <div class="ans hide" id="s-ans">
+      <p class="en" id="s-en"></p><p class="jp" id="s-jp"></p>
+      <div class="tags"><span class="tag" id="s-cat"></span><span class="tag" id="s-color"></span><span class="tag" id="s-shape"></span></div>
+      <p class="tip" id="s-tip"></p>
+    </div>
+  </div>
+  <div class="row r3" id="s-nav"><button id="s-prev">‹ 前へ</button><button class="primary" id="s-reveal">答えを見る</button><button id="s-next">次へ ›</button></div>
+  <div class="row r2 hide" id="s-judge"><button class="ng" id="s-bad">✗ まだ</button><button class="ok" id="s-good">✓ 覚えた</button></div>
+  <section class="sec"><h2>出題</h2><div class="opts" id="s-modes"></div></section>
+</section>
+
+<!-- RULES -->
+<section id="v-rules" class="hide">
+  <div class="bar"><i id="r-prog"></i></div>
+  <div class="meta"><span id="r-count"></span><span id="r-score"></span></div>
+  <div class="card">
+    <p class="qbig" id="r-q"></p>
+    <div id="r-opts"></div>
+    <p class="ex hide" id="r-ex"></p>
+  </div>
+  <div class="row r2"><button id="r-prev">‹ 前へ</button><button class="primary" id="r-next">次へ ›</button></div>
+  <section class="sec"><h2>出題</h2><div class="opts" id="r-modes"></div></section>
+</section>
+
+<!-- TEST -->
+<section id="v-test" class="hide">
+  <div id="t-start" class="card center">
+    <p class="qbig">本番と同じ形式の模擬テスト</p>
+    <p class="help">Part 1 標識10問（全問正解で合格）<br>Part 2 一般知識30問（24問以上で合格）</p>
+    <p class="help" id="t-hist"></p>
+    <button class="primary" id="t-go" style="width:100%;margin-top:10px">テスト開始</button>
+  </div>
+  <div id="t-run" class="hide">
+    <div class="bar"><i id="t-prog"></i></div>
+    <div class="meta"><span id="t-count"></span><span id="t-part"></span></div>
+    <div class="card">
+      <svg class="sign sm hide" id="t-sign" viewBox="0 0 100 100"></svg>
+      <p class="qbig" id="t-q"></p>
+      <div id="t-opts"></div>
+      <p class="ex hide" id="t-ex"></p>
+    </div>
+    <div class="row"><button class="primary hide" id="t-next">次へ ›</button></div>
+    <button id="t-quit" style="width:100%;margin-top:10px;min-height:44px;font-size:14px">やめる</button>
+  </div>
+  <div id="t-result" class="card center hide">
+    <p class="q">結果</p>
+    <p class="big" id="t-verdict"></p>
+    <table style="text-align:left;margin-top:8px">
+      <tr><td>Part 1 標識</td><td id="t-p1"></td></tr>
+      <tr><td>Part 2 一般知識</td><td id="t-p2"></td></tr>
+    </table>
+    <p class="help">間違えた問題は「苦手」に追加されました。標識・ルールタブの「苦手だけ」で復習できます。</p>
+    <button class="primary" id="t-again" style="width:100%;margin-top:10px">もう一度</button>
+  </div>
+</section>
+
+<!-- G2 -->
+<section class="sec" id="g2sec">
+  <h2>G2に映る画面 / Glasses view</h2>
+  <canvas id="pv" width="576" height="288"></canvas>
+  <p class="help">メガネ操作：タップ＝答え→次へ ／ 上下スワイプ＝前後 ／ ダブルタップ＝終了。標識・ルールタブで選んだ問題がメガネに出ます。</p>
+</section>
+<section class="sec" id="qrsec">
+  <h2>メガネに読み込む / Load on G2</h2>
+  <button id="qrbtn" style="width:100%">このページのQRコードを表示</button>
+  <div id="qrbox" class="hide"></div>
+  <p class="help">別の端末でこのページを開いてQRを表示 → EvenアプリのEven Hubタブ「Scan QR」で読み取り。</p>
+</section>
+</main>
+
+<script type="module">
+/* ================= SIGN ART ================= */
+const Y='#FFCC00',R='#C8102E',O='#F58220',K='#111',W='#fff',G='#00734A',B='#1F4EA1',BR='#7A4A1E',YG='#C5E000';
+const T=(x,y,s,txt,c)=>`<text x="${x}" y="${y}" font-size="${s}" font-weight="700" fill="${c}" text-anchor="middle" font-family="Arial,Helvetica,sans-serif">${txt}</text>`;
+const dia=(f,i='')=>`<polygon points="50,3 97,50 50,97 3,50" fill="${f}" stroke="${K}" stroke-width="3"/>`+i;
+const penta=(i='')=>`<polygon points="50,4 95,40 95,96 5,96 5,40" fill="${YG}" stroke="${K}" stroke-width="3"/>`+i;
+const rv=(i='')=>`<rect x="16" y="4" width="68" height="92" rx="4" fill="${W}" stroke="${K}" stroke-width="3"/>`+i;
+const sq=(i='')=>`<rect x="8" y="8" width="84" height="84" rx="4" fill="${W}" stroke="${K}" stroke-width="3"/>`+i;
+const slash=`<circle cx="50" cy="50" r="34" fill="none" stroke="${R}" stroke-width="7"/><line x1="26" y1="26" x2="74" y2="74" stroke="${R}" stroke-width="7"/>`;
+const ln=(d,w=7,c=K)=>`<path d="${d}" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/>`;
+const ah=(x,y,dir,c=K)=>{const m={u:`${x},${y-10} ${x-9},${y+2} ${x+9},${y+2}`,r:`${x+10},${y} ${x-2},${y-9} ${x-2},${y+9}`,l:`${x-10},${y} ${x+2},${y-9} ${x+2},${y+9}`,d:`${x},${y+10} ${x-9},${y-2} ${x+9},${y-2}`}[dir];return `<polygon points="${m}" fill="${c}"/>`};
+const ped=(x=50,y=26,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle cx="0" cy="0" r="6" fill="${K}"/>${ln('M-1,9 L-3,30',7)}${ln('M-2,14 L-12,24',5)}${ln('M-2,14 L9,21',5)}${ln('M-3,30 L-11,46',6)}${ln('M-3,30 L7,46',6)}</g>`;
+
+const S=[
+/* regulatory */
+{id:'stop',c:'規制',svg:`<polygon points="30,4 70,4 96,30 96,70 70,96 30,96 4,70 4,30" fill="${R}" stroke="${W}" stroke-width="3"/>`+T(50,58,22,'STOP',W),en:'STOP',jp:'一時停止',color:'赤',shape:'八角形',tip:'停止線・横断歩道・縁石の手前で完全に止まる。八角形はSTOPだけ。'},
+{id:'yield',c:'規制',svg:`<polygon points="4,10 96,10 50,92" fill="${R}"/><polygon points="21,20 79,20 50,71" fill="${W}"/>`+T(50,40,13,'YIELD',R),en:'YIELD',jp:'譲れ',color:'赤白',shape:'逆三角形',tip:'減速し、必要なら止まって相手に道を譲る。'},
+{id:'sl55',c:'規制',svg:rv(T(50,24,12,'SPEED',K)+T(50,38,12,'LIMIT',K)+T(50,78,34,'55',K)),en:'Speed limit 55',jp:'最高速度55マイル',color:'白黒',shape:'縦長方形',tip:'白い縦長＝守らなければいけない規制標識。'},
+{id:'dne',c:'規制',svg:`<circle cx="50" cy="50" r="46" fill="${R}"/><rect x="14" y="43" width="72" height="14" fill="${W}"/>`+T(50,33,11,'DO NOT',W)+T(50,76,12,'ENTER',W),en:'Do not enter',jp:'進入禁止',color:'赤白',shape:'円形',tip:'一方通行の出口などに立つ。この先に入ってはいけない。'},
+{id:'wrong',c:'規制',svg:`<rect x="4" y="22" width="92" height="56" rx="4" fill="${R}" stroke="${W}" stroke-width="3"/>`+T(50,46,16,'WRONG',W)+T(50,67,16,'WAY',W),en:'Wrong way',jp:'逆走している',color:'赤白',shape:'横長方形',tip:'進入禁止の先にある。安全な場所ですぐ引き返す。'},
+{id:'oneway',c:'規制',svg:`<rect x="3" y="32" width="94" height="36" rx="3" fill="${K}"/><polygon points="8,42 64,42 64,36 88,50 64,64 64,58 8,58" fill="${W}"/>`+T(36,54,11,'ONE WAY',K),en:'One way',jp:'一方通行',color:'黒白',shape:'横長方形',tip:'矢印の方向にだけ進める。'},
+{id:'noleft',c:'規制',svg:sq(ln('M62,78 L62,48 Q62,40 54,40 L36,40',8)+ah(30,40,'l')+slash),en:'No left turn',jp:'左折禁止',color:'白黒＋赤',shape:'正方形',tip:'赤丸に斜線＝その行為は禁止。'},
+{id:'noright',c:'規制',svg:sq(ln('M38,78 L38,48 Q38,40 46,40 L64,40',8)+ah(70,40,'r')+slash),en:'No right turn',jp:'右折禁止',color:'白黒＋赤',shape:'正方形',tip:'赤丸に斜線＝禁止。赤信号での右折もできない。'},
+{id:'nou',c:'規制',svg:sq(ln('M60,78 L60,46 Q60,30 45,30 Q32,30 32,46 L32,56',7)+ah(32,62,'d')+slash),en:'No U-turn',jp:'Uターン禁止',color:'白黒＋赤',shape:'正方形',tip:'バージニアではUターンは「左折2回」の扱い。'},
+{id:'notor',c:'規制',svg:rv(T(50,28,14,'NO',K)+T(50,48,14,'TURN',K)+T(50,68,14,'ON',K)+T(50,88,14,'RED',K)),en:'No turn on red',jp:'赤信号での右折禁止',color:'白黒',shape:'縦長方形',tip:'普段は赤でも完全停止後に右折OK。この標識があれば青まで待つ。'},
+{id:'dnp',c:'規制',svg:rv(T(50,32,15,'DO',K)+T(50,54,15,'NOT',K)+T(50,76,15,'PASS',K)),en:'Do not pass',jp:'追い越し禁止',color:'白黒',shape:'縦長方形',tip:'この区間では追い越してはいけない。'},
+{id:'ltyog',c:'規制',svg:rv(T(50,22,10,'LEFT TURN',K)+T(50,36,10,'YIELD',K)+T(50,50,10,'ON',K)+`<circle cx="50" cy="72" r="14" fill="#1FA34A" stroke="${K}" stroke-width="2"/>`),en:'Left turn yield on green',jp:'青信号での左折は対向車に譲る',color:'白黒＋緑',shape:'縦長方形',tip:'青の丸信号で左折するときは、対向車と歩行者が優先。'},
+{id:'keepr',c:'規制',svg:rv(T(50,20,11,'KEEP',K)+T(50,33,11,'RIGHT',K)+`<rect x="30" y="58" width="14" height="30" rx="3" fill="${K}"/>`+ln('M58,86 L58,60 Q58,50 66,50',6)+ah(70,50,'r')),en:'Keep right',jp:'右側を通行',color:'白黒',shape:'縦長方形',tip:'中央分離帯や障害物の右側を通る。'},
+{id:'hov',c:'規制',svg:rv(`<polygon points="50,12 64,28 50,44 36,28" fill="none" stroke="${K}" stroke-width="4"/>`+T(50,62,15,'HOV 2+',K)+T(50,82,12,'ONLY',K)),en:'HOV lane',jp:'相乗り車（2人以上）専用レーン',color:'白黒',shape:'縦長方形',tip:'路面の白いひし形もHOVレーンの印。'},
+{id:'lanel',c:'規制',svg:rv(ln('M50,72 L50,40 Q50,30 40,30 L34,30',8)+ah(28,30,'l')+T(50,88,13,'ONLY',K)),en:'Left lane must turn left',jp:'この車線は左折専用',color:'白黒',shape:'縦長方形',tip:'矢印の方向にしか進めない車線（Lane use control）。'},
+{id:'hc',c:'規制',svg:rv(`<rect x="28" y="12" width="44" height="44" rx="3" fill="${B}"/><circle cx="48" cy="20" r="4" fill="${W}"/>${ln('M47,26 L47,38 L58,38 L62,48',4,W)}<circle cx="46" cy="42" r="9" fill="none" stroke="${W}" stroke-width="3"/>`+T(50,72,10,'RESERVED',K)+T(50,86,10,'PARKING',K)),en:'Disabled parking',jp:'障害者専用駐車スペース',color:'白＋青',shape:'縦長方形',tip:'許可証がない車は駐車できない。'},
+/* warning */
+{id:'stopah',c:'警告',svg:dia(Y,`<polygon points="42,28 58,28 66,36 66,52 58,60 42,60 34,52 34,36" fill="${R}"/>`+ln('M50,86 L50,72',6)+ah(50,68,'u')),en:'Stop ahead',jp:'この先 一時停止',color:'黄',shape:'ひし形',tip:'黄色のひし形＝警告。この先にSTOPがあるので減速の準備。'},
+{id:'yieldah',c:'警告',svg:dia(Y,`<polygon points="32,28 68,28 50,60" fill="${R}"/><polygon points="40,33 60,33 50,51" fill="${W}"/>`+ln('M50,86 L50,72',6)+ah(50,68,'u')),en:'Yield ahead',jp:'この先 譲れ',color:'黄',shape:'ひし形',tip:'この先にYIELDがある。'},
+{id:'signal',c:'警告',svg:dia(Y,`<rect x="42" y="22" width="16" height="46" rx="4" fill="${K}"/><circle cx="50" cy="31" r="4.5" fill="${R}"/><circle cx="50" cy="45" r="4.5" fill="${Y}"/><circle cx="50" cy="59" r="4.5" fill="#1FA34A"/><rect x="48" y="68" width="4" height="12" fill="${K}"/>`),en:'Signal ahead',jp:'この先 信号あり',color:'黄',shape:'ひし形',tip:'見通しの悪い場所の先に信号がある。'},
+{id:'nopz',c:'警告',svg:`<polygon points="4,14 96,50 4,86" fill="${Y}" stroke="${K}" stroke-width="3"/>`+T(30,42,11,'NO',K)+T(34,55,11,'PASSING',K)+T(28,68,11,'ZONE',K),en:'No passing zone',jp:'追い越し禁止区間の始まり',color:'黄',shape:'横向き三角（ペナント）',tip:'道路の左側に立つ。この形はこの標識だけ。'},
+{id:'merge',c:'警告',svg:dia(Y,`<rect x="54" y="22" width="8" height="58" fill="${K}"/>`+ln('M30,80 L54,54',8)),en:'Merge',jp:'合流',color:'黄',shape:'ひし形',tip:'横から来る車線が合流する。お互いに調整して入る。'},
+{id:'laneend',c:'警告',svg:dia(Y,ln('M38,82 L38,20',7)+ln('M62,82 L62,56 L50,40 L50,20',7)),en:'Lane ends / Lane reduction',jp:'車線が減る',color:'黄',shape:'ひし形',tip:'細くなる側の車線の人は、隣の車線に移る準備をする。'},
+{id:'divb',c:'警告',svg:dia(Y,ln('M44,84 L44,50 L30,22',6)+ln('M56,84 L56,50 L70,22',6)+`<path d="M50,24 L50,46" stroke="${K}" stroke-width="6"/>`),en:'Divided highway begins',jp:'この先 中央分離帯あり',color:'黄',shape:'ひし形',tip:'道路が中央分離帯で分かれる。右側を走る。'},
+{id:'dive',c:'警告',svg:dia(Y,ln('M30,82 L44,54 L44,20',6)+ln('M70,82 L56,54 L56,20',6)+`<path d="M50,56 L50,80" stroke="${K}" stroke-width="6"/>`),en:'Divided highway ends',jp:'中央分離帯が終わる（対面通行へ）',color:'黄',shape:'ひし形',tip:'この先は対向車がすぐ横を走る。'},
+{id:'slip',c:'警告',svg:dia(Y,`<rect x="36" y="22" width="28" height="22" rx="5" fill="${K}"/><rect x="33" y="40" width="34" height="8" rx="2" fill="${K}"/>`+ln('M38,58 Q30,66 38,74 Q46,82 38,88',4)+ln('M62,58 Q54,66 62,74 Q70,82 62,88',4)),en:'Slippery when wet',jp:'濡れるとスリップしやすい',color:'黄',shape:'ひし形',tip:'雨の降りはじめ30分は油が浮いて特に滑りやすい。'},
+{id:'lowc',c:'警告',svg:dia(Y,ah(50,24,'d')+T(50,57,15,"12'6\"",K)+ah(50,76,'u')),en:'Low clearance',jp:'高さ制限（この高さ以下）',color:'黄',shape:'ひし形',tip:'橋や高架の下の高さ。トラックなどは注意。'},
+{id:'hill',c:'警告',svg:dia(Y,`<polygon points="22,72 78,72 78,50" fill="${K}"/><rect x="40" y="38" width="22" height="14" rx="2" fill="${K}" transform="rotate(-22 50 46)"/><circle cx="42" cy="56" r="4" fill="${K}"/><circle cx="58" cy="50" r="4" fill="${K}"/>`),en:'Hill / Steep grade',jp:'この先 急な下り坂',color:'黄',shape:'ひし形',tip:'スピードを落として、ブレーキの使いすぎに注意。'},
+{id:'deer',c:'警告',svg:dia(Y,`<ellipse cx="46" cy="54" rx="17" ry="8" fill="${K}"/>${ln('M58,50 L64,34',6)}<ellipse cx="68" cy="31" rx="7" ry="4" fill="${K}"/>${ln('M64,28 L60,18 M60,22 L56,20 M66,28 L70,18',3)}${ln('M34,58 L32,74 M40,60 L42,74 M52,60 L54,74 M58,58 L62,72',4)}`),en:'Deer crossing',jp:'シカの飛び出し注意',color:'黄',shape:'ひし形',tip:'夕方と明け方、特に秋に多い。避けられないときはハンドルを切らずにしっかりブレーキ。'},
+{id:'pedx',c:'警告',svg:dia(Y,ped(50,26,1)),en:'Pedestrian crossing',jp:'歩行者の横断あり',color:'黄',shape:'ひし形',tip:'横断歩道の歩行者には必ず譲る。'},
+{id:'bike',c:'警告',svg:dia(Y,`<circle cx="32" cy="64" r="11" fill="none" stroke="${K}" stroke-width="4"/><circle cx="68" cy="64" r="11" fill="none" stroke="${K}" stroke-width="4"/>${ln('M32,64 L44,46 L62,46 L68,64 M44,46 L52,64 L62,46',4)}<circle cx="56" cy="28" r="5" fill="${K}"/>${ln('M54,34 L50,46',5)}`),en:'Bicycle crossing',jp:'自転車の横断・通行あり',color:'黄',shape:'ひし形',tip:'自転車を追い越すときは3フィート以上あける。'},
+{id:'curve',c:'警告',svg:dia(Y,`<path d="M40,76 L40,50 Q40,36 54,36 L54,28 L69,41 L54,54 L54,46 Q50,46 50,50 L50,76 Z" fill="${K}"/>`),en:'Curve right',jp:'この先 右カーブ',color:'黄',shape:'ひし形',tip:'カーブの手前で減速する。'},
+{id:'sharp',c:'警告',svg:dia(Y,ln('M42,78 L42,40 L60,40',9)+ah(66,40,'r')),en:'Sharp turn right',jp:'この先 右に急カーブ（直角）',color:'黄',shape:'ひし形',tip:'かなり減速が必要。'},
+{id:'wind',c:'警告',svg:dia(Y,ln('M44,82 Q30,72 44,62 Q58,52 44,42 Q34,36 46,28',7)+ah(48,22,'u')),en:'Winding road',jp:'この先 カーブが続く',color:'黄',shape:'ひし形',tip:'くねくね道。スピードを落とす。'},
+{id:'cross',c:'警告',svg:dia(Y,ln('M50,20 L50,80',9)+ln('M22,50 L78,50',9)),en:'Crossroad',jp:'この先 十字路',color:'黄',shape:'ひし形',tip:'横から車が来る交差点がある。'},
+{id:'tint',c:'警告',svg:dia(Y,ln('M50,80 L50,40',9)+ln('M24,40 L76,40',9)),en:'T-intersection',jp:'この先 T字路（突き当たり）',color:'黄',shape:'ひし形',tip:'道が突き当たる。右か左に曲がる準備。'},
+{id:'yint',c:'警告',svg:dia(Y,ln('M50,82 L50,52 L32,26 M50,52 L68,26',9)),en:'Y-intersection',jp:'この先 Y字路',color:'黄',shape:'ひし形',tip:'道が二股に分かれる。'},
+{id:'round',c:'警告',svg:dia(Y,`<circle cx="50" cy="50" r="17" fill="none" stroke="${K}" stroke-width="6"/>`+ah(64,38,'u')+ah(38,40,'l')+ah(50,68,'r')),en:'Roundabout ahead',jp:'この先 ラウンドアバウト',color:'黄',shape:'ひし形',tip:'反時計回り。中を回っている車と歩行者に譲って入る。'},
+{id:'twoway',c:'警告',svg:dia(Y,`<polygon points="37,74 45,74 45,42 52,42 41,28 30,42 37,42" fill="${K}"/><polygon points="55,26 63,26 63,58 70,58 59,72 48,58 55,58" fill="${K}"/>`),en:'Two-way traffic',jp:'この先 対面通行',color:'黄',shape:'ひし形',tip:'一方通行が終わり、対向車が来る。'},
+{id:'advis',c:'警告',svg:`<rect x="14" y="14" width="72" height="72" rx="6" fill="${Y}" stroke="${K}" stroke-width="3"/>`+T(50,50,26,'35',K)+T(50,74,14,'M P H',K),en:'Advisory speed',jp:'推奨速度（カーブなどの安全な速度）',color:'黄',shape:'正方形（補助標識）',tip:'警告標識の下につく。そのカーブを安全に走れる速度。'},
+/* school */
+{id:'school',c:'学校',svg:penta(T(50,74,15,'SCHOOL',K)),en:'School zone',jp:'スクールゾーン',color:'黄緑（または黄）',shape:'五角形',tip:'五角形は学校関係だけ。子どもに注意し、表示された速度を守る。'},
+{id:'schx',c:'学校',svg:penta(ped(40,34,.8)+ped(62,40,.6)+`<rect x="18" y="84" width="64" height="4" fill="${K}"/>`),en:'School crossing',jp:'通学路の横断歩道',color:'黄緑（または黄）',shape:'五角形',tip:'子どもが横断する場所。止まる準備をする。'},
+/* railroad */
+{id:'rr',c:'踏切',svg:`<circle cx="50" cy="50" r="45" fill="${Y}" stroke="${K}" stroke-width="3"/><line x1="22" y1="22" x2="78" y2="78" stroke="${K}" stroke-width="5"/><line x1="78" y1="22" x2="22" y2="78" stroke="${K}" stroke-width="5"/>`+T(28,57,18,'R',K)+T(72,57,18,'R',K),en:'Railroad crossing ahead',jp:'この先 踏切',color:'黄',shape:'円形',tip:'丸い黄色の標識は踏切の予告だけ。'},
+{id:'xbuck',c:'踏切',svg:`<rect x="2" y="42" width="96" height="16" fill="${W}" stroke="${K}" stroke-width="2" transform="rotate(40 50 50)"/><rect x="2" y="42" width="96" height="16" fill="${W}" stroke="${K}" stroke-width="2" transform="rotate(-40 50 50)"/>`,en:'Railroad crossing (crossbuck)',jp:'踏切（クロスバック）',color:'白黒',shape:'X字',tip:'YIELDと同じ扱い。列車が来ていたら止まる。スクールバスは踏切で必ず止まる。'},
+/* work zone */
+{id:'work',c:'工事',svg:dia(O,T(50,42,12,'ROAD',K)+T(50,56,12,'WORK',K)+T(50,70,11,'AHEAD',K)),en:'Road work ahead',jp:'この先 工事中',color:'オレンジ',shape:'ひし形',tip:'オレンジ＝工事区間。スピード違反は最大$500の罰金。'},
+{id:'flag',c:'工事',svg:dia(O,ped(44,28,1)+ln('M53,44 L66,30',3)+`<rect x="64" y="22" width="14" height="10" fill="${K}"/>`),en:'Flagger ahead',jp:'この先 誘導員あり',color:'オレンジ',shape:'ひし形',tip:'旗を持った作業員の指示に従う。'},
+{id:'detour',c:'工事',svg:`<rect x="4" y="26" width="92" height="48" rx="4" fill="${O}" stroke="${K}" stroke-width="3"/>`+T(40,57,17,'DETOUR',K)+ah(84,50,'r'),en:'Detour',jp:'迂回路',color:'オレンジ',shape:'横長方形',tip:'通行止めのため、矢印の方向に回り道する。'},
+/* guide */
+{id:'guide',c:'案内',svg:`<rect x="4" y="16" width="92" height="68" rx="6" fill="${G}" stroke="${W}" stroke-width="2"/>`+T(50,42,13,'Richmond',W)+T(50,64,13,'12 mi',W),en:'Destination / distance',jp:'行き先と距離の案内',color:'緑',shape:'横長方形',tip:'緑＝行き先・方向・距離の案内。'},
+{id:'hosp',c:'案内',svg:`<rect x="6" y="6" width="88" height="88" rx="8" fill="${B}"/><rect x="18" y="18" width="64" height="64" rx="4" fill="none" stroke="${W}" stroke-width="3"/>`+T(50,68,48,'H',W),en:'Hospital',jp:'病院あり',color:'青',shape:'正方形',tip:'青＝ガソリン・食事・病院など運転者向けサービス。'},
+{id:'gas',c:'案内',svg:`<rect x="6" y="6" width="88" height="88" rx="8" fill="${B}"/><rect x="32" y="26" width="26" height="50" rx="3" fill="${W}"/><rect x="37" y="32" width="16" height="12" fill="${B}"/>${ln('M58,40 L68,46 L68,66 L64,70',4,W)}`,en:'Gas station',jp:'ガソリンスタンドあり',color:'青',shape:'正方形',tip:'青いサービス案内の一つ。'},
+{id:'rec',c:'案内',svg:`<rect x="4" y="22" width="92" height="56" rx="6" fill="${BR}" stroke="${W}" stroke-width="2"/>`+T(50,46,13,'STATE',W)+T(50,64,13,'PARK',W),en:'Recreation / historic site',jp:'公園・観光地・史跡',color:'茶',shape:'横長方形',tip:'茶色＝レクリエーションや歴史・文化の場所。'}
+];
+
+/* ================= RULE QUESTIONS (a[0] is correct) ================= */
+const Q=[
+['標識がない住宅地・学校・商業地区の最高速度は？',['25 mph','35 mph','45 mph','55 mph'],'住宅地・学校・商業地区は25mph。'],
+['標識がない未舗装路（unpaved road）の最高速度は？',['35 mph','25 mph','45 mph','55 mph'],'未舗装路は35mph。'],
+['標識がない、それ以外の道路の最高速度は？',['55 mph','45 mph','65 mph','70 mph'],'その他の道路は55mph。'],
+['「Reckless driving（無謀運転）」になるスピードは？',['制限速度より20mph以上速い、または85mph超','制限速度より10mph以上速い','制限速度より15mph以上速い','75mph超'],'20mph以上オーバー、または85mphを超えると無謀運転で、交通違反ではなく犯罪（軽罪）扱い。'],
+['時速35mph未満のとき、前の車との車間は最低何秒？',['2秒','1秒','3秒','4秒'],'35mph未満は2秒、35〜45mphは3秒、46〜70mphは4秒。'],
+['時速35〜45mphのときの車間は？',['3秒','2秒','4秒','5秒'],'35〜45mphは3秒。'],
+['時速46〜70mphのときの車間は？',['4秒','2秒','3秒','6秒'],'46〜70mphは4秒。'],
+['曲がるとき、ウインカーはどのくらい手前で出す？',['100フィート（3〜4秒）手前','20フィート手前','曲がり始めてから','500フィート手前'],'100フィート、3〜4秒前に合図する。'],
+['雨で窓のワイパーを使っているとき、ヘッドライトは？',['必ず点ける','点けなくてよい','ハイビームにする','夜だけ点ける'],'悪天候でワイパーを使うときはヘッドライトが必須。'],
+['悪天候で視界が何フィート以下になったらヘッドライトを点ける？',['500フィート','1000フィート','200フィート','100フィート'],'雨・霧・雪などで視界が500フィートまで下がったら点灯。'],
+['対向車がどのくらいまで近づいたらロービームにする？',['500フィート','200フィート','1000フィート','100フィート'],'対向車が500フィート以内ならロービーム。'],
+['前の車の後ろを走るとき、何フィート以内ならロービーム？',['200フィート','500フィート','100フィート','50フィート'],'前の車から200フィート以内ならロービーム。'],
+['霧のときのライトは？',['ロービーム','ハイビーム','ハザードだけ','消す'],'霧はライトを反射するので、ハイビームは逆に見えにくくなる。'],
+['消火栓から何フィート以内は駐車禁止？',['15フィート','10フィート','20フィート','30フィート'],'消火栓から15フィート以内は駐車禁止。消防署の入口も15フィート。'],
+['交差点から何フィート以内は駐車禁止？',['20フィート','10フィート','15フィート','50フィート'],'交差点から20フィート以内は駐車禁止。'],
+['踏切から何フィート以内は駐車禁止？',['50フィート','15フィート','20フィート','100フィート'],'踏切から50フィート以内は駐車禁止。'],
+['縦列駐車では縁石から何フィート以内に止める？',['1フィート以内','2フィート以内','3フィート以内','6フィート以内'],'縁石から1フィート以内。'],
+['赤く塗られた縁石の意味は？',['停車も駐車もしてはいけない','乗り降りだけOK','荷物の積み下ろしだけOK','30分まで駐車OK'],'赤は停車・駐車禁止。白は乗り降りだけ、黄は積み下ろしだけ（車から離れない）。'],
+['白く塗られた縁石の意味は？',['人の乗り降りの間だけ止めてよい','駐車禁止','荷物の積み下ろしだけ','障害者専用'],'白は乗り降りの間だけ。'],
+['21歳以上の飲酒運転（DUI）の基準となる血中アルコール濃度（BAC）は？',['0.08%以上','0.05%以上','0.10%以上','0.02%以上'],'21歳以上は0.08%以上でDUI。0.08%未満でも運転に影響があればDUIになり得る。'],
+['21歳未満の場合、BACがいくつ以上で違法になる？',['0.02%以上','0.05%以上','0.08%以上','0.10%以上'],'21歳未満は0.02%以上0.08%未満で違法な飲酒。0.08%以上ならDUI。'],
+['酔いをさます方法として正しいのは？',['時間がたつのを待つだけ','コーヒーを飲む','冷たいシャワーを浴びる','運動する'],'アルコールを減らせるのは時間だけ。'],
+['ビール12オンスと同じアルコール量は？',['ワイン5オンス、またはお酒のショット1杯','ワイン12オンス','ショット3杯','ビールはアルコールが少ないので比べられない'],'ビール12oz＝ワイン5oz＝ショット1杯。'],
+['赤いランプを点滅させて止まっているスクールバスがいたら？',['どの方向からでも止まる','後ろの車だけ止まる','徐行して通過する','クラクションを鳴らして進む'],'どの方向からでも停止。道路・私道・学校の敷地内でも同じ。'],
+['中央分離帯のある道路の反対側にスクールバスが止まっていたら？',['止まらなくてよい','必ず止まる','徐行すればよい','クラクションを鳴らす'],'中央分離帯や柵で分かれた道路の反対車線なら、止まらなくてよい。'],
+['サイレンを鳴らした緊急車両が近づいてきたら？',['右端に寄って止まる','その場で急停止','左に寄る','スピードを上げて先に行く'],'すぐ道を譲り、右端に寄って停止する。'],
+['ライトを点滅させた緊急車両の後ろを走るときの距離は？',['500フィート以上','100フィート以上','200フィート以上','50フィート以上'],'500フィートより近づいてはいけない。'],
+['路肩に止まってライトを点滅させている緊急車両やレッカー車を通り過ぎるときは？',['可能なら隣ではない車線に移り、無理なら注意して進む','そのまま同じ速度で通る','隣で止まる','クラクションで知らせる'],'Move Over法。安全にできれば隣の車線から移る。'],
+['運転中のスマホについて正しいのは？',['手に持つのは禁止（緊急時を除く）','信号待ちなら持ってよい','通話なら持ってよい','ゆっくりなら持ってよい'],'手に持つのは禁止。ナビは手に持たず、入力しなければ使ってよい。'],
+['工事区間でスマホを手に持って運転したときの罰金は？',['$250','$50','$100','$1000'],'工事区間では$250。'],
+['工事区間でのスピード違反の罰金は最大いくら？',['$500','$100','$250','$1000'],'工事区間のスピード違反は最大$500。'],
+['シートベルトについて正しいのは？',['運転手も前後の同乗者も全員つける','運転手だけ','前の席だけ','高速道路だけ'],'前も後ろも全員。18歳未満の同乗者は運転手に責任がある。'],
+['信号も標識もない交差点に、2台が同時に着いたら？',['左の車が右の車に譲る','右の車が左の車に譲る','大きい車が先','先にクラクションを鳴らした方'],'同時なら左の車が右の車に譲る（右が先）。'],
+['全方向一時停止（4-Way Stop）で先に進めるのは？',['先に完全停止した車（同時なら右の車）','大きい道の車','直進する車','左の車'],'先に止まった順。同時なら右の車が先。'],
+['赤信号で右折できる条件は？',['完全停止して、禁止標識や赤矢印がなく、安全なとき','減速すればいつでも','右折レーンならいつでも','できない'],'完全停止後、「NO TURN ON RED」や赤矢印がなければ、歩行者と車に譲って右折できる。'],
+['赤信号で左折できるのはどんなとき？',['一方通行の道から一方通行の道へ左折するときだけ','いつでもできない','左折レーンならいつでも','夜だけ'],'一方通行から一方通行への左折だけOK。'],
+['赤の点滅信号の意味は？',['完全に止まり、安全を確認してから進む','注意して進む','止まって青を待つ','止まらずに徐行'],'赤の点滅＝STOP標識と同じ。'],
+['黄色の点滅信号の意味は？',['減速して注意して進む','完全に止まる','止まって青を待つ','加速して通過'],'黄の点滅＝注意して進む。'],
+['黄色の点滅矢印のときの左折は？',['対向車と歩行者に譲れば曲がってよい','曲がってはいけない','優先して曲がれる','止まってから青を待つ'],'対向車・歩行者に譲って左折可。バイクや自転車にも注意。'],
+['交差点に入る前に信号が黄色になったら？',['止まる','加速して通過','クラクションを鳴らして進む','そのまま進む'],'交差点に入っていなければ止まる。すでに入っていたら注意して通過。'],
+['信号が故障して消えているときは？',['全方向一時停止（4-Way Stop）として扱う','優先道路として進む','徐行して通過','大きい道が優先'],'故障した信号は全方向一時停止として扱う。'],
+['車線の上に赤い「X」が表示されていたら？',['その車線は絶対に走らない','注意して走る','追い越し専用','バス専用'],'赤いX＝その車線は使えない。黄色のXはできるだけ早く車線を出る。'],
+['商業地区・市街地でUターンできる場所は？',['交差点だけ','どこでも','高速道路','カーブの途中'],'市街地では交差点だけ。高速道路では絶対にしない。'],
+['自転車を追い越すときの間隔は？',['3フィート以上','1フィート以上','2フィート以上','間隔は決まっていない'],'3フィート以上。車線が狭ければ車線を変えて追い越す。'],
+['右側から追い越してよいのはどんなとき？',['前の車が左折の合図をして曲がろうとしているとき','いつでも','前の車が遅いとき','夜だけ'],'前の車が左折するとき（または同じ方向に複数車線があるとき）。'],
+['追い越してはいけない場所は？',['坂の頂上・カーブ・交差点・踏切','直線の道','片側2車線の道','昼間の道路'],'坂・カーブ・交差点・踏切では追い越し禁止（同方向の複数車線を除く）。'],
+['片側複数車線の高速道路の左車線は？',['追い越し用','遅い車用','トラック専用','どれでも同じ'],'左車線は追い越し用。遅い車は右車線。'],
+['インターステートに入るとき、優先なのは？',['すでに本線を走っている車','入ってくる車','大きい車','速い方'],'合流する側が本線の車に譲る。'],
+['白い杖を持った人や盲導犬を連れた人が渡ろうとしていたら？',['完全に止まる','減速して通過','クラクションで知らせる','そのまま進む'],'白い杖や盲導犬の歩行者には必ず完全停止。'],
+['横断歩道や交差点を渡る歩行者・自転車がいたら？',['譲る','先に通る','クラクションを鳴らす','減速だけする'],'横断歩道・交差点を渡る歩行者と自転車に譲る。'],
+['葬儀の車列（funeral procession）に出会ったら？',['割り込んだり加わったりせず、譲る','列の間に入ってよい','クラクションで知らせる','追い越してよい'],'葬儀の車列には譲り、割り込まない。'],
+['道路中央の黄色の二重実線の意味は？',['どちらの方向も追い越し禁止','追い越しOK','片側だけ追い越しOK','バス専用'],'二重実線＝両方向追い越し禁止（左折などで横切るのはOK）。'],
+['道路中央の黄色の破線の意味は？',['安全なら追い越してよい','追い越し禁止','駐車OK','一方通行'],'黄色の破線は、安全ならどちらの方向も追い越しOK。'],
+['白の二重実線で区切られたレーン（HOVなど）は？',['線をまたいではいけない','自由に出入りできる','夜なら入れる','追い越し用'],'白の二重実線はまたげない。'],
+['ラウンドアバウトの走り方は？',['反時計回りで、中を回る車と歩行者に譲って入る','時計回り','入る車が優先','止まらずに一気に入る'],'反時計回り。中の車と歩行者が優先。出るときはウインカー。'],
+['ABS（アンチロックブレーキ）の車で急ブレーキするときは？',['強く踏み続け、ポンピングしない','何度もポンピングする','軽く踏む','サイドブレーキを使う'],'ABSは絶対にポンピングしない。'],
+['シカとの衝突が避けられないときは？',['ハンドルを切らず、しっかりブレーキをかけて車線内で止まる','大きくハンドルを切ってよける','加速する','目を閉じる'],'急ハンドルは対向車線や木への衝突につながる。'],
+['長距離運転での休憩の目安は？',['2時間ごと','4時間ごと','6時間ごと','眠くなってから'],'少なくとも2時間ごとに休む。10〜20分の仮眠でも効果大。'],
+['大型トラックの死角について正しいのは？',['ミラーで運転手の顔が見えなければ、相手からも見えていない','トラックの後ろはよく見えている','トラックに死角はない','すぐ前に割り込んでも大丈夫'],'横・後ろ・前にNo-Zone（死角）がある。追い越した後すぐ前に入らない。'],
+['上手なドライバーは前方をどのくらい先まで見ている？',['20〜30秒先','2〜3秒先','5秒先','1分先'],'目線は20〜30秒先へ。'],
+['左腕を窓から出して上に曲げる手信号の意味は？',['右折','左折','停止','追い越してください'],'真横＝左折、上＝右折、下＝減速・停止。'],
+['警察に止められたら？',['車内にいて、エンジンを切り、手をハンドルの上に置く','すぐ車から降りる','書類を探しておく','窓を閉めて待つ'],'指示がない限り車から出ない。手は見える位置に。'],
+['けが人がなく、車が動かせる事故のときは？',['すぐに車を道路から移動させる','警察が来るまで動かさない','そのまま帰る','相手の車を押す'],'動かせて安全なら、すぐ道路から移動させる。'],
+['止まっている無人の車にぶつけたら？',['メモを残し、24時間以内に警察に届ける','そのまま帰る','1週間以内に届ける','保険会社にだけ連絡する'],'持ち主への連絡メモを残し、24時間以内に警察へ。'],
+['雨が降り始めて最初の30分は？',['路面の油が浮いて特に滑りやすい','一番安全','乾いた道と同じ','ハイビームにする'],'降り始めは油と水が混ざって滑りやすい。'],
+['E-ZPass専用の料金レーンに間違って入ったら？',['止まらずにそのまま進む','その場で止まる','バックして戻る','隣のレーンに急に移る'],'止まらない。カメラで記録され、あとで請求が来る。'],
+['仮免許で練習するとき、助手席に必要なのは？',['21歳以上の免許保持者（保護者・兄弟姉妹なら18歳以上）','16歳以上なら誰でも','免許がなくても大人ならOK','同乗者はいらない'],'免許を持つ21歳以上が隣に座る必要がある。'],
+['バックするときの一番多いミスは？',['左右をよく確認しないこと','ゆっくり下がること','後ろを振り向くこと','ミラーを使うこと'],'体をひねって後ろの窓から直接見て、ゆっくり下がる。']
+];
+
+/* ================= STATE ================= */
+const $=id=>document.getElementById(id);
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+let known=store.get('ez_known',{}),weak=store.get('ez_weak',{}),hist=store.get('ez_hist',[]);
+const save=()=>{store.set('ez_known',known);store.set('ez_weak',weak)};
+const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+let tab='guide', glassDeck='signs';
+const ST={signs:{order:S.map((_,i)=>i),pos:0,shown:false,mode:'all',cat:'all'},rules:{order:Q.map((_,i)=>i),pos:0,shown:false,mode:'all',pick:null,opts:null}};
+const key=(d,i)=>d[0]+':'+i;
+
+function deck(name){const s=ST[name];let d=s.order;
+  if(name==='signs'&&s.cat!=='all')d=d.filter(i=>S[i].c===s.cat);
+  if(s.mode==='weak')d=d.filter(i=>weak[key(name,i)]);
+  if(!d.length)d=s.order;if(s.pos>=d.length)s.pos=0;return d}
+
+/* ================= TABS ================= */
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{tab=b.dataset.t;
+  document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('sel',x===b));
+  ['guide','signs','rules','test'].forEach(v=>$('v-'+v).classList.toggle('hide',v!==tab));
+  if(tab==='signs'||tab==='rules')glassDeck=tab;
+  window.scrollTo(0,0);render()});
+
+function modeButtons(name,el,extra){
+  const s=ST[name];el.innerHTML='';
+  const mk=(label,on,fn)=>{const b=document.createElement('button');b.textContent=label;if(on)b.classList.add('sel');b.onclick=fn;el.appendChild(b)};
+  if(extra)extra(mk);
+  mk('全部',s.mode==='all',()=>{s.mode='all';s.pos=0;s.shown=false;s.pick=null;render()});
+  mk('苦手だけ',s.mode==='weak',()=>{if(!Object.keys(weak).some(k=>k[0]===name[0])){alert('苦手な問題はまだありません');return}s.mode='weak';s.pos=0;s.shown=false;s.pick=null;render()});
+  mk('シャッフル',false,()=>{s.order=shuf(s.order);s.pos=0;s.shown=false;s.pick=null;s.opts=null;render()});
+  mk('記録リセット',false,()=>{if(!confirm('覚えた／苦手の記録を消しますか？'))return;Object.keys(known).forEach(k=>{if(k[0]===name[0])delete known[k]});Object.keys(weak).forEach(k=>{if(k[0]===name[0])delete weak[k]});save();s.mode='all';render()});
+}
+const catsList=['all','規制','警告','学校','踏切','工事','案内'];
+
+/* ================= SIGNS VIEW ================= */
+function renderSigns(){
+  const s=ST.signs,d=deck('signs'),i=d[s.pos],c=S[i];
+  $('s-sign').innerHTML=c.svg;
+  $('s-count').textContent=`${s.pos+1} / ${d.length}`;
+  $('s-prog').style.width=((s.pos+1)/d.length*100)+'%';
+  const kn=Object.keys(known).filter(k=>k[0]==='s').length,wk=Object.keys(weak).filter(k=>k[0]==='s').length;
+  $('s-score').textContent=`覚えた ${kn}/${S.length} ・ 苦手 ${wk}`;
+  $('s-ans').classList.toggle('hide',!s.shown);$('s-q').classList.toggle('hide',s.shown);
+  $('s-en').textContent=c.en;$('s-jp').textContent=c.jp;$('s-cat').textContent=c.c;$('s-color').textContent='色 '+c.color;$('s-shape').textContent='形 '+c.shape;$('s-tip').textContent=c.tip;
+  $('s-nav').classList.toggle('hide',s.shown);$('s-judge').classList.toggle('hide',!s.shown);
+  modeButtons('signs',$('s-modes'),mk=>{
+    const sel=document.createElement('select');sel.style.cssText='min-height:40px;border-radius:999px;padding:0 12px;font:inherit;font-size:14px;border:1px solid var(--line);background:var(--card);color:var(--ink)';
+    catsList.forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v==='all'?'種類：すべて':'種類：'+v;if(v===s.cat)o.selected=true;sel.appendChild(o)});
+    sel.onchange=()=>{s.cat=sel.value;s.pos=0;s.shown=false;render()};$('s-modes').appendChild(sel)});
+}
+function sTap(){const s=ST.signs;if(s.shown)sMove(1);else{s.shown=true;render()}}
+function sMove(n){const s=ST.signs,l=deck('signs').length;s.pos=(s.pos+n+l)%l;s.shown=false;render()}
+function sJudge(ok){const s=ST.signs,k=key('signs',deck('signs')[s.pos]);if(ok){known[k]=1;delete weak[k]}else{weak[k]=1;delete known[k]}save();sMove(1)}
+$('s-reveal').onclick=sTap;$('s-next').onclick=()=>sMove(1);$('s-prev').onclick=()=>sMove(-1);
+$('s-good').onclick=()=>sJudge(true);$('s-bad').onclick=()=>sJudge(false);
+
+/* ================= RULES VIEW ================= */
+const L='ABCD';
+function rCur(){const s=ST.rules,d=deck('rules'),i=d[s.pos];if(!s.opts||s.opts.i!==i)s.opts={i,o:shuf([0,1,2,3])};return {i,q:Q[i],o:s.opts.o}}
+function renderRules(){
+  const s=ST.rules,d=deck('rules'),{i,q,o}=rCur();
+  $('r-count').textContent=`${s.pos+1} / ${d.length}`;$('r-prog').style.width=((s.pos+1)/d.length*100)+'%';
+  const kn=Object.keys(known).filter(k=>k[0]==='r').length,wk=Object.keys(weak).filter(k=>k[0]==='r').length;
+  $('r-score').textContent=`正解 ${kn}/${Q.length} ・ 苦手 ${wk}`;
+  $('r-q').textContent=q[0];const box=$('r-opts');box.innerHTML='';
+  o.forEach((oi,n)=>{const b=document.createElement('button');b.className='opt';b.innerHTML=`<b>${L[n]}</b>`;b.appendChild(document.createTextNode(q[1][oi]));
+    if(s.shown){if(oi===0)b.classList.add('right');else if(s.pick===oi)b.classList.add('wrong')}
+    b.onclick=()=>{if(s.shown)return;s.pick=oi;s.shown=true;const k=key('rules',i);if(oi===0){known[k]=1;delete weak[k]}else{weak[k]=1;delete known[k]}save();render()};box.appendChild(b)});
+  $('r-ex').classList.toggle('hide',!s.shown);
+  $('r-ex').textContent=(s.pick===0?'⭕ 正解！ ':s.pick==null?'':'❌ 不正解。 ')+'答え：'+q[1][0]+'。'+q[2];
+  modeButtons('rules',$('r-modes'));
+}
+function rTap(){const s=ST.rules;if(s.shown)rMove(1);else{s.shown=true;s.pick=null;render()}}
+function rMove(n){const s=ST.rules,l=deck('rules').length;s.pos=(s.pos+n+l)%l;s.shown=false;s.pick=null;render()}
+$('r-next').onclick=()=>rMove(1);$('r-prev').onclick=()=>rMove(-1);
+
+/* ================= TEST ================= */
+let TS=null;
+function renderTestStart(){const last=hist.slice(-3);$('t-hist').textContent=last.length?'最近の結果：'+last.map(h=>h.pass?'合格':'不合格').join(' → '):''}
+$('t-go').onclick=$('t-again').onclick=()=>{
+  const sg=shuf(S.map((_,i)=>i)).slice(0,10).map(i=>{const wrong=shuf(S.map((_,j)=>j).filter(j=>j!==i&&S[j].jp!==S[i].jp)).slice(0,3);return {t:'s',i,opts:shuf([i,...wrong])}});
+  const rq=shuf(Q.map((_,i)=>i)).slice(0,30).map(i=>({t:'r',i,opts:shuf([0,1,2,3])}));
+  TS={items:[...sg,...rq],pos:0,ans:[],picked:null};
+  $('t-start').classList.add('hide');$('t-result').classList.add('hide');$('t-run').classList.remove('hide');glassDeck='test';render()};
+$('t-quit').onclick=()=>{if(!confirm('テストをやめますか？'))return;TS=null;$('t-run').classList.add('hide');$('t-start').classList.remove('hide');glassDeck='signs';render()};
+function tItem(){const it=TS.items[TS.pos];if(it.t==='s')return {it,q:'この標識の意味は？',opts:it.opts.map(j=>S[j].jp),correct:it.opts.indexOf(it.i),ex:`${S[it.i].en}：${S[it.i].jp}。${S[it.i].tip}`};
+  const q=Q[it.i];return {it,q:q[0],opts:it.opts.map(o=>q[1][o]),correct:it.opts.indexOf(0),ex:q[2]}}
+function renderTest(){
+  if(!TS){renderTestStart();return}
+  const {it,q,opts,correct,ex}=tItem();
+  $('t-count').textContent=`${TS.pos+1} / 40`;$('t-prog').style.width=((TS.pos+1)/40*100)+'%';
+  $('t-part').textContent=it.t==='s'?'Part 1 標識（全問正解）':'Part 2 一般知識（24問以上）';
+  $('t-sign').classList.toggle('hide',it.t!=='s');if(it.t==='s')$('t-sign').innerHTML=S[it.i].svg;
+  $('t-q').textContent=q;const box=$('t-opts');box.innerHTML='';
+  opts.forEach((o,n)=>{const b=document.createElement('button');b.className='opt';b.innerHTML=`<b>${L[n]}</b>`;b.appendChild(document.createTextNode(o));
+    if(TS.picked!=null){if(n===correct)b.classList.add('right');else if(n===TS.picked)b.classList.add('wrong')}
+    b.onclick=()=>{if(TS.picked!=null)return;TS.picked=n;TS.ans[TS.pos]=n===correct;if(n!==correct){weak[(it.t==='s'?'s:':'r:')+it.i]=1;save()}render()};box.appendChild(b)});
+  $('t-ex').classList.toggle('hide',TS.picked==null);$('t-ex').textContent=(TS.picked===correct?'⭕ 正解 ':'❌ 不正解 ')+ex;
+  $('t-next').classList.toggle('hide',TS.picked==null);$('t-next').textContent=TS.pos===39?'結果を見る':'次へ ›';
+}
+$('t-next').onclick=()=>{if(TS.pos<39){TS.pos++;TS.picked=null;render();window.scrollTo(0,0);return}
+  const p1=TS.ans.slice(0,10).filter(Boolean).length,p2=TS.ans.slice(10).filter(Boolean).length,pass=p1===10&&p2>=24;
+  hist.push({pass,p1,p2,d:Date.now()});store.set('ez_hist',hist.slice(-20));
+  $('t-verdict').textContent=pass?'合格！':'不合格';$('t-verdict').className='big '+(pass?'pass':'fail');
+  $('t-p1').textContent=`${p1} / 10 ${p1===10?'✓':'✗'}`;$('t-p2').textContent=`${p2} / 30 ${p2>=24?'✓':'✗'}`;
+  TS=null;$('t-run').classList.add('hide');$('t-result').classList.remove('hide');glassDeck='signs';render()};
+
+/* ================= GLASSES CONTENT ================= */
+const barTxt=(n,t)=>{const f=Math.round(n/t*10);return '━'.repeat(f)+'─'.repeat(10-f)};
+function glassModel(){
+  if(glassDeck==='test'&&TS){const {it,q,opts}=tItem();const head=`模擬テスト ${TS.pos+1}/40\n\n`;
+    const body=opts.map((o,n)=>`${L[n]}. ${o}`).join('\n');
+    return it.t==='s'?{layout:'sign',svg:S[it.i].svg,text:head+body+'\n\n[スマホで回答]'}:{layout:'text',text:head+q+'\n\n'+body+'\n\n[スマホで回答]'}}
+  if(glassDeck==='rules'){const s=ST.rules,d=deck('rules'),{q,o}=rCur();
+    const head=`ルール ${s.pos+1}/${d.length}  ${barTxt(s.pos+1,d.length)}\n\n`;
+    const body=o.map((oi,n)=>`${L[n]}. ${q[1][oi]}`).join('\n');
+    if(!s.shown)return {layout:'text',text:head+q[0]+'\n\n'+body+'\n\n[タップで答え]'};
+    return {layout:'text',text:head+q[0]+'\n\n答え：'+L[o.indexOf(0)]+'. '+q[1][0]+'\n'+q[2]+'\n\n[タップで次へ]'}}
+  const s=ST.signs,d=deck('signs'),c=S[d[s.pos]];const head=`標識 ${s.pos+1}/${d.length}  ${barTxt(s.pos+1,d.length)}\n\n`;
+  if(!s.shown)return {layout:'sign',svg:c.svg,text:head+'この標識は？\nWhat sign is this?\n\n\n[タップで答え]'};
+  return {layout:'sign',svg:c.svg,text:head+c.en+'\n'+c.jp+'\n\n色: '+c.color+'\n形: '+c.shape+'\n\n[タップで次へ]'};
+}
+
+const IMG=144,IX=24,IY=72,cvCache={};
+function signCanvas(svg){
+  if(cvCache[svg])return Promise.resolve(cvCache[svg]);
+  return new Promise((res,rej)=>{
+    const im=new Image();
+    im.onload=()=>{const cv=document.createElement('canvas');cv.width=cv.height=IMG;const x=cv.getContext('2d');
+      x.fillStyle='#000';x.fillRect(0,0,IMG,IMG);x.drawImage(im,6,6,IMG-12,IMG-12);
+      const d=x.getImageData(0,0,IMG,IMG),p=d.data;
+      for(let i=0;i<p.length;i+=4){const l=Math.min(255,Math.round((.299*p[i]+.587*p[i+1]+.114*p[i+2])*1.1));p[i]=p[i+1]=p[i+2]=l;p[i+3]=255}
+      x.putImageData(d,0,0);cvCache[svg]=cv;res(cv)};
+    im.onerror=rej;
+    im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="${IMG}" height="${IMG}">${svg}</svg>`);
+  });
+}
+function wrapLines(ctx,text,maxW){const out=[];text.split('\n').forEach(line=>{if(!line){out.push('');return}let cur='';for(const ch of line){if(ctx.measureText(cur+ch).width>maxW){out.push(cur);cur=ch}else cur+=ch}out.push(cur)});return out}
+async function renderPreview(m,cv){
+  const x=$('pv').getContext('2d');x.fillStyle='#000';x.fillRect(0,0,576,288);
+  let tx0=16,tw=544;
+  if(m.layout==='sign'&&cv){const t=document.createElement('canvas');t.width=t.height=IMG;const c=t.getContext('2d');c.drawImage(cv,0,0);
+    const d=c.getImageData(0,0,IMG,IMG),p=d.data;for(let i=0;i<p.length;i+=4){const l=p[i]/255;p[i]=70*l;p[i+1]=255*l;p[i+2]=140*l}
+    c.putImageData(d,0,0);x.drawImage(t,IX,IY);tx0=200;tw=360}
+  x.fillStyle='#46ff8c';x.font='18px -apple-system,"Hiragino Sans",sans-serif';x.textBaseline='top';
+  wrapLines(x,m.text,tw).slice(0,12).forEach((l,i)=>x.fillText(l,tx0,14+i*22));
+}
+
+/* ================= G2 BRIDGE ================= */
+let sdk=null,bridge=null,busy=Promise.resolve(),g2Layout=null,pushedSvg=null;
+const inputBox=()=>new sdk.TextContainerProperty({xPosition:0,yPosition:0,width:576,height:288,borderWidth:0,borderColor:0,paddingLength:0,containerID:1,containerName:'input',content:' ',isEventCapture:1});
+function pageFor(layout,text){
+  if(layout==='sign')return {containerTotalNum:3,textObject:[inputBox(),new sdk.TextContainerProperty({xPosition:188,yPosition:8,width:380,height:272,borderWidth:0,borderColor:0,paddingLength:6,containerID:3,containerName:'info',content:text.slice(0,990),isEventCapture:0})],imageObject:[new sdk.ImageContainerProperty({xPosition:IX,yPosition:IY,width:IMG,height:IMG,containerID:2,containerName:'sign'})]};
+  return {containerTotalNum:2,textObject:[inputBox(),new sdk.TextContainerProperty({xPosition:8,yPosition:4,width:560,height:280,borderWidth:0,borderColor:0,paddingLength:6,containerID:3,containerName:'info',content:text.slice(0,990),isEventCapture:0})]};
+}
+function pushGlasses(m,cv){
+  if(!bridge)return;
+  busy=busy.then(async()=>{try{
+    if(g2Layout!==m.layout){await bridge.rebuildPageContainer(new sdk.RebuildPageContainer(pageFor(m.layout,m.text)));g2Layout=m.layout;pushedSvg=null}
+    else await bridge.textContainerUpgrade(new sdk.TextContainerUpgrade({containerID:3,containerName:'info',content:m.text.slice(0,1990)}));
+    if(m.layout==='sign'&&cv&&pushedSvg!==m.svg){pushedSvg=m.svg;
+      const blob=await new Promise(r=>cv.toBlob(r,'image/png'));
+      await bridge.updateImageRawData(new sdk.ImageRawDataUpdate({containerID:2,containerName:'sign',imageData:Array.from(new Uint8Array(await blob.arrayBuffer()))}))}
+  }catch(e){console.error(e)}});
+}
+
+/* ================= RENDER ================= */
+let rid=0;
+async function render(){
+  if(tab==='signs')renderSigns();else if(tab==='rules')renderRules();else if(tab==='test')renderTest();
+  const my=++rid,m=glassModel();let cv=null;
+  if(m.layout==='sign'){try{cv=await signCanvas(m.svg)}catch(e){}}
+  if(my!==rid)return;
+  renderPreview(m,cv);pushGlasses(m,cv);
+}
+
+$('qrbtn').onclick=()=>{const box=$('qrbox');box.classList.remove('hide');box.innerHTML='';
+  const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+  s.onload=()=>new QRCode(box,{text:location.href.split('#')[0],width:220,height:220});
+  s.onerror=()=>box.textContent='QRを読み込めませんでした: '+location.href;document.head.appendChild(s)};
+
+async function connect(){
+  for(const u of ['https://esm.sh/@evenrealities/even_hub_sdk@0.0.14','https://cdn.jsdelivr.net/npm/@evenrealities/even_hub_sdk@0.0.14/+esm']){try{sdk=await import(u);break}catch(e){console.warn('sdk',u)}}
+  if(!sdk)return;
+  const b=await Promise.race([sdk.waitForEvenAppBridge(),new Promise(r=>setTimeout(()=>r(null),5000))]);if(!b)return;
+  const m=glassModel();
+  const res=await b.createStartUpPageContainer(new sdk.CreateStartUpPageContainer(pageFor(m.layout,m.text)));
+  if(res!==0&&res!=='success'){console.error('startup',res);return}
+  bridge=b;g2Layout=m.layout;pushedSvg=null;
+  $('conn').textContent='G2 接続中';$('conn').classList.add('on');$('qrsec').classList.add('hide');
+  const E=sdk.OsEventTypeList,ty=e=>e?(e.eventType??E.CLICK_EVENT):null;
+  b.onEvenHubEvent(ev=>{const s=ty(ev.sysEvent),x=ty(ev.textEvent);
+    if(s===E.DOUBLE_CLICK_EVENT||x===E.DOUBLE_CLICK_EVENT){b.shutDownPageContainer(1);return}
+    if(glassDeck==='test')return;
+    const mv=glassDeck==='rules'?rMove:sMove,tp=glassDeck==='rules'?rTap:sTap;
+    if(x===E.SCROLL_BOTTOM_EVENT){mv(1);return}
+    if(x===E.SCROLL_TOP_EVENT){mv(-1);return}
+    if(s===E.CLICK_EVENT||x===E.CLICK_EVENT)tp()});
+  setTimeout(render,300);
+}
+render();connect();
+</script>
+</body>
+</html>
