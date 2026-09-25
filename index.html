@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>G2 Sign Cards</title>
+<style>
+:root{--bg:#f4f5f2;--card:#fff;--ink:#16181a;--sub:#5d6166;--line:#e1e3de;--acc:#1f6f4a;--acc-bg:#e3f2ea;--bad:#b3261e;--bad-bg:#fbe9e7;--g2:#46ff8c}
+@media (prefers-color-scheme:dark){:root{--bg:#121413;--card:#1c1f1d;--ink:#eef0ec;--sub:#a4a9a4;--line:#2d312e;--acc:#62d39a;--acc-bg:#1d3328;--bad:#ff8a80;--bad-bg:#3a201e}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;-webkit-tap-highlight-color:transparent}
+main{max-width:520px;margin:0 auto;padding:16px 16px 40px}
+header{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
+h1{font-size:19px;margin:0;font-weight:700}
+.chip{font-size:12px;padding:5px 10px;border-radius:999px;background:var(--line);color:var(--sub);white-space:nowrap}
+.chip.on{background:var(--acc-bg);color:var(--acc)}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin:4px 0 6px}
+.bar i{display:block;height:100%;background:var(--acc);width:0;transition:width .25s}
+.meta{display:flex;justify-content:space-between;font-size:13px;color:var(--sub);margin-bottom:10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px 16px 18px;text-align:center}
+.sign{width:170px;height:170px;margin:0 auto 10px;display:block}
+.q{font-size:15px;color:var(--sub);margin:4px 0 0}
+.ans{margin-top:10px;padding-top:14px;border-top:1px dashed var(--line)}
+.en{font-size:24px;font-weight:700;margin:0}
+.jp{font-size:17px;margin:4px 0 0}
+.tags{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:10px}
+.tag{font-size:12px;padding:4px 9px;border-radius:999px;background:var(--bg);color:var(--sub)}
+.tip{font-size:14px;color:var(--sub);margin:10px 0 0;line-height:1.6}
+.row{display:grid;gap:10px;margin-top:12px}
+.r3{grid-template-columns:1fr 1.4fr 1fr}.r2{grid-template-columns:1fr 1fr}
+button{font:inherit;font-size:16px;min-height:52px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+button:active{transform:scale(.98)}
+.primary{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:700}
+@media (prefers-color-scheme:dark){.primary{color:#0d1f16}}
+.ok{background:var(--acc-bg);border-color:transparent;color:var(--acc);font-weight:700}
+.ng{background:var(--bad-bg);border-color:transparent;color:var(--bad);font-weight:700}
+.hide{display:none!important}
+.sec{margin-top:22px}
+.sec h2{font-size:14px;color:var(--sub);font-weight:600;margin:0 0 8px}
+.opts{display:flex;gap:8px;flex-wrap:wrap}
+.opts button{min-height:40px;font-size:14px;padding:0 14px;border-radius:999px}
+.opts button.sel{background:var(--ink);color:var(--card);border-color:var(--ink)}
+#pv{width:100%;aspect-ratio:2/1;background:#000;border-radius:12px;display:block}
+.help{font-size:13px;color:var(--sub);line-height:1.7;margin:8px 0 0}
+#qrbox{display:flex;justify-content:center;padding:12px;background:#fff;border-radius:12px;margin-top:8px}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1>標識カード <span style="font-weight:400;color:var(--sub);font-size:14px">Road Signs</span></h1>
+  <span class="chip" id="conn">プレビュー</span>
+</header>
+
+<div class="bar"><i id="prog"></i></div>
+<div class="meta"><span id="count">1 / 20</span><span id="score">覚えた 0 ・ 苦手 0</span></div>
+
+<div class="card">
+  <svg class="sign" id="sign" viewBox="0 0 100 100" role="img"></svg>
+  <p class="q" id="qtext">この標識の意味は？ / What does this sign mean?</p>
+  <div class="ans hide" id="ans">
+    <p class="en" id="en"></p>
+    <p class="jp" id="jp"></p>
+    <div class="tags"><span class="tag" id="tcolor"></span><span class="tag" id="tshape"></span></div>
+    <p class="tip" id="tip"></p>
+  </div>
+</div>
+
+<div class="row r3" id="navRow">
+  <button id="prev" aria-label="前へ">‹ 前へ</button>
+  <button class="primary" id="reveal">答えを見る</button>
+  <button id="next" aria-label="次へ">次へ ›</button>
+</div>
+<div class="row r2 hide" id="judgeRow">
+  <button class="ng" id="bad">✗ まだ</button>
+  <button class="ok" id="good">✓ 覚えた</button>
+</div>
+
+<section class="sec">
+  <h2>出題 / Mode</h2>
+  <div class="opts" id="modes">
+    <button data-m="all" class="sel">全部</button>
+    <button data-m="weak">苦手だけ</button>
+    <button id="shuffle">シャッフル</button>
+    <button id="reset">記録リセット</button>
+  </div>
+</section>
+
+<section class="sec">
+  <h2>G2に映る画面 / Glasses view</h2>
+  <canvas id="pv" width="576" height="288"></canvas>
+  <p class="help">メガネ操作：タップ＝答え→次へ ／ 上下スワイプ＝前後 ／ ダブルタップ＝終了<br>スマホのボタンもメガネと連動します。</p>
+</section>
+
+<section class="sec" id="qrsec">
+  <h2>メガネに読み込む / Load on G2</h2>
+  <button id="qrbtn" style="width:100%">このページのQRコードを表示</button>
+  <div id="qrbox" class="hide"></div>
+  <p class="help">別の端末でこのページを開いてQRを表示 → EvenアプリのEven Hubタブ右上「Scan QR」で読み取り。</p>
+</section>
+</main>
+
+<script type="module">
+const Y='#FFCC00',R='#C8102E',O='#F58220',K='#111',W='#fff',G='#00734A',B='#1F4EA1';
+const dia=f=>`<polygon points="50,3 97,50 50,97 3,50" fill="${f}" stroke="${K}" stroke-width="3"/>`;
+const t=(x,y,s,txt,c)=>`<text x="${x}" y="${y}" font-size="${s}" font-weight="700" fill="${c}" text-anchor="middle" font-family="Arial,Helvetica,sans-serif">${txt}</text>`;
+
+const CARDS=[
+{svg:`<polygon points="30,4 70,4 96,30 96,70 70,96 30,96 4,70 4,30" fill="${R}" stroke="${W}" stroke-width="3"/>`+t(50,58,22,'STOP',W),en:'STOP',jp:'一時停止',color:'赤 Red',shape:'八角形 Octagon',tip:'白線の手前で完全に止まる。4-way stopは先に止まった車が先。'},
+{svg:`<polygon points="4,10 96,10 50,92" fill="${R}"/><polygon points="21,20 79,20 50,71" fill="${W}"/>`+t(50,40,13,'YIELD',R),en:'YIELD',jp:'譲れ',color:'赤白 Red/White',shape:'逆三角 Down triangle',tip:'減速し、必要なら停止して相手に道を譲る。'},
+{svg:`<polygon points="50,4 95,40 95,96 5,96 5,40" fill="#C5E000" stroke="${K}" stroke-width="3"/>`+t(50,74,15,'SCHOOL',K),en:'School zone',jp:'スクールゾーン',color:'黄緑 Yellow-green',shape:'五角形 Pentagon',tip:'五角形は学校・通学路だけ。子どもに注意。'},
+{svg:`<circle cx="50" cy="50" r="45" fill="${Y}" stroke="${K}" stroke-width="3"/><line x1="22" y1="22" x2="78" y2="78" stroke="${K}" stroke-width="5"/><line x1="78" y1="22" x2="22" y2="78" stroke="${K}" stroke-width="5"/>`+t(28,57,18,'R',K)+t(72,57,18,'R',K),en:'Railroad ahead',jp:'この先 踏切',color:'黄 Yellow',shape:'円 Circle',tip:'丸い黄色の標識は踏切の予告だけ。'},
+{svg:`<rect x="2" y="42" width="96" height="16" fill="${W}" stroke="${K}" stroke-width="2" transform="rotate(40 50 50)"/><rect x="2" y="42" width="96" height="16" fill="${W}" stroke="${K}" stroke-width="2" transform="rotate(-40 50 50)"/>`,en:'Railroad crossing',jp:'踏切（クロスバック）',color:'白 White',shape:'X字 Crossbuck',tip:'YIELDと同じ扱い。列車が来たら止まる。'},
+{svg:`<polygon points="4,14 96,50 4,86" fill="${Y}" stroke="${K}" stroke-width="3"/>`+t(30,42,11,'NO',K)+t(34,55,11,'PASSING',K)+t(28,68,11,'ZONE',K),en:'No passing zone',jp:'追い越し禁止区間',color:'黄 Yellow',shape:'横向き三角 Pennant',tip:'道路の左側に立っている。'},
+{svg:dia(Y)+`<path d="M40,76 L40,50 Q40,36 54,36 L54,28 L69,41 L54,54 L54,46 Q50,46 50,50 L50,76 Z" fill="${K}"/>`,en:'Curve ahead',jp:'この先 カーブ',color:'黄 Yellow',shape:'ひし形 Diamond',tip:'黄色のひし形＝警告。減速の準備。'},
+{svg:dia(Y)+`<rect x="54" y="22" width="8" height="58" fill="${K}"/><line x1="30" y1="80" x2="54" y2="52" stroke="${K}" stroke-width="8"/>`,en:'Merge',jp:'合流',color:'黄 Yellow',shape:'ひし形 Diamond',tip:'横から車線が合流してくる。お互いに調整する。'},
+{svg:dia(Y)+`<polygon points="37,74 45,74 45,42 52,42 41,28 30,42 37,42" fill="${K}"/><polygon points="55,26 63,26 63,58 70,58 59,72 48,58 55,58" fill="${K}"/>`,en:'Two-way traffic',jp:'この先 対面通行',color:'黄 Yellow',shape:'ひし形 Diamond',tip:'一方通行が終わり、対向車が来る。'},
+{svg:dia(Y)+`<rect x="42" y="24" width="16" height="44" rx="4" fill="${K}"/><circle cx="50" cy="32" r="4.5" fill="${Y}"/><circle cx="50" cy="46" r="4.5" fill="${Y}"/><circle cx="50" cy="60" r="4.5" fill="${Y}"/><rect x="48" y="68" width="4" height="12" fill="${K}"/>`,en:'Signal ahead',jp:'この先 信号あり',color:'黄 Yellow',shape:'ひし形 Diamond',tip:'見通しの悪い場所の先に信号がある。'},
+{svg:dia(O)+t(50,42,12,'ROAD',K)+t(50,56,12,'WORK',K)+t(50,70,11,'AHEAD',K),en:'Road work ahead',jp:'この先 工事中',color:'オレンジ Orange',shape:'ひし形 Diamond',tip:'オレンジ＝工事区間。作業員に注意、罰金が上がることも。'},
+{svg:`<rect x="18" y="4" width="64" height="92" rx="4" fill="${W}" stroke="${K}" stroke-width="3"/>`+t(50,24,12,'SPEED',K)+t(50,38,12,'LIMIT',K)+t(50,78,34,'55',K),en:'Speed limit 55',jp:'最高速度 55マイル',color:'白 White',shape:'縦長方形 Rectangle',tip:'白い縦長＝規制標識。55mph≒時速88km。'},
+{svg:`<rect x="18" y="4" width="64" height="92" rx="4" fill="${W}" stroke="${K}" stroke-width="3"/>`+t(50,20,11,'KEEP',K)+t(50,33,11,'RIGHT',K)+`<rect x="30" y="58" width="16" height="30" rx="3" fill="${K}"/><path d="M52,86 L52,56 Q52,46 62,46 L62,40 L72,50 L62,60 L62,54 Q60,54 60,58 L60,86 Z" fill="${K}"/>`,en:'Keep right',jp:'右側を通行',color:'白 White',shape:'縦長方形 Rectangle',tip:'中央分離帯などの右側を通る。'},
+{svg:`<circle cx="50" cy="50" r="46" fill="${R}"/><rect x="14" y="43" width="72" height="14" fill="${W}"/>`+t(50,33,11,'DO NOT',W)+t(50,76,12,'ENTER',W),en:'Do not enter',jp:'進入禁止',color:'赤 Red',shape:'円 Circle',tip:'一方通行の出口などに立つ。入ってはいけない。'},
+{svg:`<rect x="4" y="22" width="92" height="56" rx="4" fill="${R}" stroke="${W}" stroke-width="3"/>`+t(50,46,16,'WRONG',W)+t(50,67,16,'WAY',W),en:'Wrong way',jp:'逆走中',color:'赤 Red',shape:'横長方形 Rectangle',tip:'逆走している。安全な場所ですぐ引き返す。'},
+{svg:`<rect x="8" y="8" width="84" height="84" rx="4" fill="${W}" stroke="${K}" stroke-width="3"/><path d="M60,74 L60,46 Q60,30 45,30 Q30,30 30,46 L30,55 L22,55 L34,70 L46,55 L38,55 L38,46 Q38,38 45,38 Q52,38 52,46 L52,74 Z" fill="${K}"/><circle cx="50" cy="50" r="34" fill="none" stroke="${R}" stroke-width="7"/><line x1="26" y1="26" x2="74" y2="74" stroke="${R}" stroke-width="7"/>`,en:'No U-turn',jp:'Uターン禁止',color:'赤丸斜線 Red slash',shape:'正方形 Square',tip:'赤丸に斜線＝その行為は禁止。'},
+{svg:`<rect x="3" y="32" width="94" height="36" rx="3" fill="${K}"/><polygon points="8,42 64,42 64,36 88,50 64,64 64,58 8,58" fill="${W}"/>`+t(36,54,11,'ONE WAY',K),en:'One way',jp:'一方通行',color:'黒白 Black/White',shape:'横長方形 Rectangle',tip:'矢印の方向にだけ進める。'},
+{svg:`<rect x="12" y="4" width="76" height="92" rx="4" fill="${W}" stroke="${K}" stroke-width="3"/>`+t(50,28,14,'NO',K)+t(50,48,14,'TURN',K)+t(50,68,14,'ON',K)+t(50,88,14,'RED',K),en:'No turn on red',jp:'赤信号での右折禁止',color:'白 White',shape:'縦長方形 Rectangle',tip:'普段は赤でも完全停止後に右折OK。この標識があればダメ。'},
+{svg:`<rect x="6" y="6" width="88" height="88" rx="8" fill="${B}"/><rect x="18" y="18" width="64" height="64" rx="4" fill="none" stroke="${W}" stroke-width="3"/>`+t(50,68,48,'H',W),en:'Hospital',jp:'病院あり',color:'青 Blue',shape:'正方形 Square',tip:'青＝ガソリン・食事・病院などのサービス案内。'},
+{svg:`<rect x="4" y="16" width="92" height="68" rx="6" fill="${G}" stroke="${W}" stroke-width="2"/>`+t(50,42,13,'Richmond',W)+t(50,62,13,'12 ↑',W),en:'Guide sign',jp:'方面・距離の案内',color:'緑 Green',shape:'横長方形 Rectangle',tip:'緑＝行き先・距離などの案内。茶色は公園・観光地。'}
+];
+
+const $=id=>document.getElementById(id);
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+let known=store.get('g2s_known',{}), weak=store.get('g2s_weak',{});
+let mode='all', order=CARDS.map((_,i)=>i), pos=0, shown=false;
+
+function deck(){const d=mode==='weak'?order.filter(i=>weak[i]):order;return d.length?d:order}
+function cur(){const d=deck();if(pos>=d.length)pos=0;return CARDS[d[pos]]}
+function curIdx(){return deck()[pos]}
+
+function renderPhone(){
+  const d=deck(),c=cur();
+  $('sign').innerHTML=c.svg;$('sign').setAttribute('aria-label',shown?c.en:'road sign');
+  $('count').textContent=`${pos+1} / ${d.length}${mode==='weak'?'（苦手）':''}`;
+  $('prog').style.width=((pos+1)/d.length*100)+'%';
+  $('score').textContent=`覚えた ${Object.keys(known).length} ・ 苦手 ${Object.keys(weak).length}`;
+  $('ans').classList.toggle('hide',!shown);$('qtext').classList.toggle('hide',shown);
+  $('en').textContent=c.en;$('jp').textContent=c.jp;$('tcolor').textContent='色 '+c.color;$('tshape').textContent='形 '+c.shape;$('tip').textContent=c.tip;
+  $('navRow').classList.toggle('hide',shown);
+  $('judgeRow').classList.toggle('hide',!shown);
+}
+
+function glassText(){
+  const d=deck(),c=cur(),n=pos+1,tot=d.length,f=Math.round(n/tot*10);
+  const bar='━'.repeat(f)+'─'.repeat(10-f);
+  if(!shown) return `${n}/${tot}  ${bar}\n\nこの標識は？\nWhat sign is this?\n\n\n[タップで答え / Tap]`;
+  return `${n}/${tot}  ${bar}\n\n${c.en}\n${c.jp}\n\n色: ${c.color}\n形: ${c.shape}\n\n[タップで次へ / Tap]`;
+}
+
+const IMG=144, IX=24, IY=72;
+function signCanvas(svg){
+  return new Promise((res,rej)=>{
+    const src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="${IMG}" height="${IMG}">${svg}</svg>`);
+    const im=new Image();
+    im.onload=()=>{const cv=document.createElement('canvas');cv.width=cv.height=IMG;const x=cv.getContext('2d');
+      x.fillStyle='#000';x.fillRect(0,0,IMG,IMG);x.drawImage(im,6,6,IMG-12,IMG-12);
+      const d=x.getImageData(0,0,IMG,IMG),p=d.data;
+      for(let i=0;i<p.length;i+=4){const l=Math.min(255,Math.round((.299*p[i]+.587*p[i+1]+.114*p[i+2])*1.1));p[i]=p[i+1]=p[i+2]=l;p[i+3]=255}
+      x.putImageData(d,0,0);res(cv)};
+    im.onerror=rej;im.src=src;
+  });
+}
+
+async function renderPreview(cv){
+  const x=$('pv').getContext('2d');x.fillStyle='#000';x.fillRect(0,0,576,288);
+  const tmp=document.createElement('canvas');tmp.width=tmp.height=IMG;const tx=tmp.getContext('2d');tx.drawImage(cv,0,0);
+  const d=tx.getImageData(0,0,IMG,IMG),p=d.data;for(let i=0;i<p.length;i+=4){const l=p[i]/255;p[i]=Math.round(70*l);p[i+1]=Math.round(255*l);p[i+2]=Math.round(140*l)}
+  tx.putImageData(d,0,0);x.drawImage(tmp,IX,IY);
+  x.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--g2')||'#46ff8c';
+  x.font='20px -apple-system,"Hiragino Sans",sans-serif';x.textBaseline='top';
+  glassText().split('\n').forEach((l,i)=>x.fillText(l,200,24+i*25));
+}
+
+// ---- G2 bridge ----
+let sdk=null, bridge=null, busy=Promise.resolve(), pushedCv=null;
+async function pushGlasses(cv){
+  if(!bridge) return;
+  const text=glassText();
+  busy=busy.then(async()=>{
+    try{
+      await bridge.textContainerUpgrade(new sdk.TextContainerUpgrade({containerID:3,containerName:'info',content:text}));
+      if(cv===pushedCv) return;
+      pushedCv=cv;
+      const blob=await new Promise(r=>cv.toBlob(r,'image/png'));
+      const bytes=Array.from(new Uint8Array(await blob.arrayBuffer()));
+      const r=await bridge.updateImageRawData(new sdk.ImageRawDataUpdate({containerID:2,containerName:'sign',imageData:bytes}));
+      if(r!=='success'&&r!==0) console.warn('image:',r);
+    }catch(e){console.error(e)}
+  });
+  return busy;
+}
+
+let lastSvg=null,lastCv=null;
+async function render(){
+  renderPhone();
+  const c=cur();
+  if(c.svg!==lastSvg){lastCv=await signCanvas(c.svg);lastSvg=c.svg}
+  await renderPreview(lastCv);
+  pushGlasses(lastCv);
+}
+
+function next(){pos=(pos+1)%deck().length;shown=false;render()}
+function prev(){const n=deck().length;pos=(pos-1+n)%n;shown=false;render()}
+function tap(){if(shown)next();else{shown=true;render()}}
+function judge(ok){const i=curIdx();if(ok){known[i]=1;delete weak[i]}else{weak[i]=1;delete known[i]}store.set('g2s_known',known);store.set('g2s_weak',weak);next()}
+
+$('reveal').onclick=tap;$('next').onclick=next;$('prev').onclick=prev;
+$('good').onclick=()=>judge(true);$('bad').onclick=()=>judge(false);
+document.querySelectorAll('#modes [data-m]').forEach(b=>b.onclick=()=>{
+  if(b.dataset.m==='weak'&&!Object.keys(weak).length){b.textContent='苦手なし';setTimeout(()=>b.textContent='苦手だけ',1200);return}
+  mode=b.dataset.m;pos=0;shown=false;document.querySelectorAll('#modes [data-m]').forEach(x=>x.classList.toggle('sel',x===b));render()});
+$('shuffle').onclick=()=>{for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]]}pos=0;shown=false;render()};
+$('reset').onclick=()=>{known={};weak={};store.set('g2s_known',known);store.set('g2s_weak',weak);mode='all';document.querySelectorAll('#modes [data-m]').forEach(x=>x.classList.toggle('sel',x.dataset.m==='all'));render()};
+$('qrbtn').onclick=()=>{
+  const box=$('qrbox');box.classList.remove('hide');box.innerHTML='';
+  const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+  s.onload=()=>new QRCode(box,{text:location.href.split('#')[0],width:220,height:220});
+  s.onerror=()=>box.textContent='QRを読み込めませんでした: '+location.href;
+  document.head.appendChild(s);
+};
+
+async function connect(){
+  const urls=['https://esm.sh/@evenrealities/even_hub_sdk@0.0.14','https://cdn.jsdelivr.net/npm/@evenrealities/even_hub_sdk@0.0.14/+esm'];
+  for(const u of urls){try{sdk=await import(u);break}catch(e){console.warn('sdk load failed',u)}}
+  if(!sdk) return;
+  const b=await Promise.race([sdk.waitForEvenAppBridge(),new Promise(r=>setTimeout(()=>r(null),5000))]);
+  if(!b) return;
+  const E=sdk.OsEventTypeList;
+  const res=await b.createStartUpPageContainer(new sdk.CreateStartUpPageContainer({
+    containerTotalNum:3,
+    textObject:[
+      new sdk.TextContainerProperty({xPosition:0,yPosition:0,width:576,height:288,borderWidth:0,borderColor:0,paddingLength:0,containerID:1,containerName:'input',content:' ',isEventCapture:1}),
+      new sdk.TextContainerProperty({xPosition:188,yPosition:12,width:376,height:264,borderWidth:0,borderColor:0,paddingLength:6,containerID:3,containerName:'info',content:'Loading...',isEventCapture:0})
+    ],
+    imageObject:[new sdk.ImageContainerProperty({xPosition:IX,yPosition:IY,width:IMG,height:IMG,containerID:2,containerName:'sign'})]
+  }));
+  if(res!==0&&res!=='success'){console.error('startup',res);return}
+  bridge=b;
+  const chip=$('conn');chip.textContent='G2 接続中';chip.classList.add('on');$('qrsec').classList.add('hide');
+  const ty=e=>e?(e.eventType??E.CLICK_EVENT):null;
+  b.onEvenHubEvent(ev=>{
+    const s=ty(ev.sysEvent),x=ty(ev.textEvent);
+    if(s===E.DOUBLE_CLICK_EVENT||x===E.DOUBLE_CLICK_EVENT){b.shutDownPageContainer(1);return}
+    if(x===E.SCROLL_BOTTOM_EVENT){next();return}
+    if(x===E.SCROLL_TOP_EVENT){prev();return}
+    if(s===E.CLICK_EVENT||x===E.CLICK_EVENT){tap()}
+  });
+  setTimeout(()=>{lastSvg=null;render()},300);
+}
+
+render();
+connect();
+</script>
+</body>
+</html>
